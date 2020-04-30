@@ -12,7 +12,8 @@ sudo metricbeat modules enable system
 sudo sed -i 's/^output.elasticsearch\:/#&/' /etc/metricbeat/metricbeat.yml
 sudo sed -i 's/^\ \ hosts\: \[\"localhost\:9200\"\]/#&/' /etc/metricbeat/metricbeat.yml
 #add kibana host
-sudo sed -i "s/^\ \ #host\: \"localhost\:5601\"/host\: \"$kibana\:5601\"/g" /etc/metricbeat/metricbeat.yml
+sudo sed -i "s/^\ \ #host\: \"localhost\:5601\"/\ \ host\: \"$kibana\:5601\"/g" /etc/metricbeat/metricbeat.yml
+sudo sed -i 's/^\(host\: \"$kibana\:5601\"\)/\ \ \1/' /etc/metricbeat/metricbeat.yml
 #enable logstash output
 sudo sed -i '/output.logstash\:/s/^#//g' /etc/metricbeat/metricbeat.yml
 sudo sed -i "s/#hosts\: \[\"localhost\:5044\"\]/hosts\: \[\"$ls_ip2\:5044\"\]/g" /etc/metricbeat/metricbeat.yml
@@ -22,11 +23,15 @@ sudo service metricbeat start
 #Filebeat
 curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.6.2-amd64.deb
 sudo dpkg -i filebeat-7.6.2-amd64.deb
+#enable log type
+sudo sed -i "s/^\(\ \ enabled\: \)false/\1true/g" /etc/filebeat/filebeat.yml
+sudo sed -i "s/^\(enabled\: true\)/\ \ \1/g" /etc/filebeat/filebeat.yml
 #disable elasticsearch output
 sudo sed -i 's/^output.elasticsearch\:/#&/' /etc/filebeat/filebeat.yml
 sudo sed -i 's/^\ \ hosts\: \[\"localhost\:9200\"\]/#&/' /etc/filebeat/filebeat.yml
 #add kibana host
-sudo sed -i "s/^\ \ #host\: \"localhost\:5601\"/host\: \"$kibana\:5601\"/g" /etc/filebeat/filebeat.yml
+sudo sed -i "s/^\ \ #host\: \"localhost\:5601\"/\ \ host\: \"$kibana\:5601\"/g" /etc/filebeat/filebeat.yml
+sudo sed -i 's/^\(host\: \"$kibana\:5601\"\)/\ \ \1/'
 #enable logstash output
 sudo sed -i '/output.logstash\:/s/^#//g' /etc/filebeat/filebeat.yml
 sudo sed -i "s/#hosts\: \[\"localhost\:5044\"\]/hosts\: \[\"$ls_ip1\:5044\"\]/g" /etc/filebeat/filebeat.yml
@@ -43,7 +48,8 @@ sudo dpkg -i packetbeat-7.6.2-amd64.deb
 sudo sed -i 's/^output.elasticsearch\:/#&/' /etc/packetbeat/packetbeat.yml
 sudo sed -i 's/^\ \ hosts\: \[\"localhost\:9200\"\]/#&/' /etc/packetbeat/packetbeat.yml
 #add kibana host
-sudo sed -i "s/^\ \ #host\: \"localhost\:5601\"/host\: \"$kibana\:5601\"/g" /etc/packetbeat/packetbeat.yml
+sudo sed -i "s/#host\: \"localhost\:5601\"/\ \ host\: \"$kibana\:5601\"/g" /etc/packetbeat/packetbeat.yml
+sudo sed -i 's/^\(host\: \"$kibana\:5601\"\)/\ \ \1/' /etc/packetbeat/packetbeat.yml
 #enable logstash output
 sudo sed -i '/output.logstash\:/s/^#//g' /etc/packetbeat/packetbeat.yml
 sudo sed -i "s/#hosts\: \[\"localhost\:5044\"\]/hosts\: \[\"$ls_ip1\:5044\"\]/g" /etc/packetbeat/packetbeat.yml
@@ -386,7 +392,8 @@ sudo auditctl -a always,exit -F arch=b64 -S rename -S renameat -S truncate -S ch
 sudo sed -i 's/^output.elasticsearch\:/#&/' /etc/auditbeat/auditbeat.yml
 sudo sed -i 's/^\ \ hosts\: \[\"localhost\:9200\"\]/#&/' /etc/auditbeat/auditbeat.yml
 #add kibana host
-sudo sed -i "s/^\ \ #host\: \"localhost\:5601\"/host\: \"$kibana\:5601\"/g" /etc/auditbeat/auditbeat.yml
+sudo sed -i "s/^\ \ #host\: \"localhost\:5601\"/\ \ host\: \"$kibana\:5601\"/g" /etc/auditbeat/auditbeat.yml
+sudo sed -i 's/^\(host\: \"$kibana\:5601\"\)/\ \ \1/' /etc/auditbeat/auditbeat.yml
 #enable logstash output
 sudo sed -i '/output.logstash\:/s/^#//g' /etc/auditbeat/auditbeat.yml
 sudo sed -i "s/#hosts\: \[\"localhost\:5044\"\]/hosts\: \[\"$ls_ip2\:5044\"\]/g" /etc/auditbeat/auditbeat.yml
